@@ -1,7 +1,7 @@
 import Player from '@vimeo/player';
 import throttle from 'lodash.throttle';
 
-const vimeoIframe = document.querySelector('#vimeo-player'); // Dodaj "#" przed id
+const vimeoIframe = document.querySelector('#vimeo-player');
 const player = new Player(vimeoIframe);
 
 const handleTimeUpdateThrottled = throttle(event => {
@@ -11,7 +11,6 @@ const handleTimeUpdateThrottled = throttle(event => {
 
 const VIDEO_STORAGE_KEY = 'videoplayer-current-time';
 
-// Zdefiniuj funkcję saveTimeToLocalStorage
 function saveTimeToLocalStorage(event) {
   const currentTime = event.seconds;
   localStorage.setItem(VIDEO_STORAGE_KEY, currentTime.toString());
