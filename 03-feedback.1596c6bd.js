@@ -1,2 +1,0 @@
-const e=document.querySelector(".feedback-form");e.addEventListener("input",(function(){const t={email:e.email.value,message:e.message.value};localStorage.setItem("feedback-form-state",JSON.stringify(t))})),document.addEventListener("DOMContentLoaded",(()=>{const t=localStorage.getItem("feedback-form-state");if(t){const a=JSON.parse(t);e.email.value=a.email,e.message.value=a.message}}));
-//# sourceMappingURL=03-feedback.1596c6bd.js.map
