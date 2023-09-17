@@ -1,23 +1,39 @@
-const feedbackForm = document.querySelector('.feedback-form');
-
-const STORAGE_KEY = 'feedback-form-state';
-
-function saveFormState() {
-  const formData = {
-    email: feedbackForm.email.value,
-    message: feedbackForm.message.value,
+import throttle from 'lodash.throttle';
+const form = document.querySelector('.feedback-form');
+const emailInput = form.querySelector('input[name="email"]');
+const messageInput = form.querySelector('textarea[name="message"]');
+function loadContentFromLocalStorage() {
+  const initialState = JSON.parse(
+    localStorage.getItem('feedback-form-state')
+  ) || {
+    email: '',
+    message: '',
   };
-
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(formData));
+  emailInput.value = initialState.email;
+  messageInput.value = initialState.message;
 }
-
-feedbackForm.addEventListener('input', saveFormState);
-
-document.addEventListener('DOMContentLoaded', () => {
-  const savedData = localStorage.getItem(STORAGE_KEY);
-  if (savedData) {
-    const formData = JSON.parse(savedData);
-    feedbackForm.email.value = formData.email;
-    feedbackForm.message.value = formData.message;
+document.addEventListener('DOMContentLoaded', loadContentFromLocalStorage);
+const saveDataToLocalStorage = throttle(() => {
+  const actualState = {
+    email: emailInput.value,
+    message: messageInput.value,
+  };
+  localStorage.setItem('feedback-form-state', JSON.stringify(actualState));
+}, 500);
+emailInput.addEventListener('input', saveDataToLocalStorage);
+messageInput.addEventListener('input', saveDataToLocalStorage);
+function submitData(event) {
+  event.preventDefault();
+  if (emailInput.value !== '' && messageInput.value !== '') {
+    const formDataToSend = JSON.parse(
+      localStorage.getItem('feedback-form-state')
+    );
+    console.log(formDataToSend);
+    localStorage.removeItem('feedback-form-state');
+    emailInput.value = '';
+    messageInput.value = '';
+  } else {
+    alert('You should fill in all the fields!');
   }
-});
+}
+form.addEventListener('submit', submitData);
